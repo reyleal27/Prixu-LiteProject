@@ -6,22 +6,25 @@ type SearchBarProps = {
   value: string;
   onChangeText: (text: string) => void;
   placeholder?: string;
+  handleSearch?: () => void;
 };
 
 export default function SearchBar({
   value,
   onChangeText,
-  placeholder = "Search movies...",
+  placeholder = "Search anime...",
+  handleSearch
 }: SearchBarProps) {
   return (
     <View style={styles.container}>
-      <Text style={styles.icon}>🔍</Text>
+      <Text style={styles.icon} onPress={handleSearch}>🔍</Text>
       <TextInput
         style={styles.input}
         value={value}
         onChangeText={onChangeText}
         placeholder={placeholder}
         placeholderTextColor={Colors.muted}
+        onPress={handleSearch}
       />
     </View>
   );
@@ -31,7 +34,7 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: Colors.secondary,
+    backgroundColor: Colors.muted,
     borderRadius: 12,
     paddingHorizontal: 10,
     paddingVertical: 4,
@@ -43,6 +46,7 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     fontSize: 16,
-    color: Colors.text,
+    color: "black",
+    padding: 4,
   },
 });
