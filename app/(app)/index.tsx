@@ -10,8 +10,7 @@ import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
 import { getTopAnime, getTrendingAnime, searchAnime } from "../api";
-import {Anime } from "../api/type/type";
-
+import { Anime } from "../api/type/type";
 
 export default function Home() {
   const [topAnime, setTopAnime] = useState<Anime[]>([]);
@@ -21,10 +20,13 @@ export default function Home() {
   const { user } = useContext(AuthContext);
   const [debouncedQuery, setDebouncedQuery] = useState<string>(searchQuery);
 
-  const hasSearch = searchQuery.trim().length > 0;
+  const hasSearch = (searchQuery ?? "").trim().length > 0;
   const showTopAnime = !hasSearch;
-  const showSearchResult = hasSearch && searchResult.length > 0;
-  const showNotFound = hasSearch && searchResult.length === 0 && !loading;
+  // const showSearchResult = hasSearch && searchResult.length > 0;
+  // const showNotFound = hasSearch && searchResult.length === 0 && !loading;
+  const showSearchResult = hasSearch && (searchResult?.length ?? 0) > 0;
+  const showNotFound =
+    hasSearch && (searchResult?.length ?? 0) === 0 && !loading;
 
   const loadHomeData = async () => {
     try {
@@ -42,8 +44,6 @@ export default function Home() {
     loadHomeData();
   }, []);
 
-
-  
   const handleSearch = async () => {
     try {
       setLoading(true);
@@ -71,8 +71,6 @@ export default function Home() {
     if (!debouncedQuery) return;
     handleSearch();
   }, [debouncedQuery]);
-  console.log("Searching for:", debouncedQuery);
-  console.log("Search results:", searchResult);
 
   return (
     <SafeAreaView style={styles.safe}>
@@ -81,9 +79,9 @@ export default function Home() {
           {/* Header */}
           <View style={styles.header}>
             <Text style={styles.brand}>
-              What do you want to watch 
+              What do you want to watch
               <Text style={{ color: Colors.primary, fontStyle: "italic" }}>
-                <span> </span>{user?.name}
+                {user?.name}
               </Text>
               ?
             </Text>
@@ -147,12 +145,22 @@ export default function Home() {
                 {showSearchResult && (
                   <View style={styles.animeCardContainer}>
                     {searchResult.map((anime) => (
-                      <AnimeCard
+                      <Pressable
                         key={anime.id}
-                        image={anime.image}
-                        title={anime.title}
-                        totalEpisodes={anime.totalEpisodes}
-                      />
+                        onPress={() =>
+                          router.push({
+                            pathname: "/(app)/(anime)/[id]",
+                            params: { id: anime.id },
+                          })
+                        }
+                      >
+                        <AnimeCard
+                          key={anime.id}
+                          image={anime.image}
+                          title={anime.title}
+                          totalEpisodes={anime.totalEpisodes}
+                        />
+                      </Pressable>
                     ))}
                   </View>
                 )}

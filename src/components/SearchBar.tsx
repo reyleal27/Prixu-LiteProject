@@ -15,6 +15,7 @@ export default function SearchBar({
   placeholder = "Search anime...",
   handleSearch
 }: SearchBarProps) {
+
   return (
     <View style={styles.container}>
       <Text style={styles.icon} onPress={handleSearch}>🔍</Text>
