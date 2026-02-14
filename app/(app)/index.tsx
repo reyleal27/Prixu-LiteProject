@@ -83,7 +83,7 @@ export default function Home() {
             <Text style={styles.brand}>
               What do you want to watch 
               <Text style={{ color: Colors.primary, fontStyle: "italic" }}>
-                {user?.name}
+                <span> </span>{user?.name}
               </Text>
               ?
             </Text>
